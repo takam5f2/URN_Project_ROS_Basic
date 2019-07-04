@@ -36,24 +36,26 @@ void process_image_callback(const sensor_msgs::Image img)
     for (int i = 0; i < img.height; i++) {
       for (int j = 0; j < img.step; j++) {
         if (img.data[i*img.step+j] == white_pixel) {
-          if (i < img.step/3)
+          if (j < img.step/3)
             white_counter_left++;
-          else if (i < img.step/3*2)
+          else if (j < img.step/3*2)
             white_counter_center++;
           else
             white_counter_right++;
         }
       }
     }
+    ROS_INFO("left: %d, center: %d, right: %d", white_counter_left, white_counter_center, white_counter_right);
+    
     if (white_counter_left == 0
         && white_counter_center == 0
         && white_counter_right == 0)
       drive_robot(0, 0);
-    else if (white_counter_center >= white_counter_left
-             && white_counter_center >= white_counter_right)
-      drive_robot(0.0, 0.5);
     else if (white_counter_left >= white_counter_center
              && white_counter_left >= white_counter_right)
+      drive_robot(0.0, 0.5);
+    else if (white_counter_center >= white_counter_left
+             && white_counter_center >= white_counter_right)
       drive_robot(0.5, 0.0);
     else if (white_counter_right >= white_counter_left
              && white_counter_right >= white_counter_center)
