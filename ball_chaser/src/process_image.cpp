@@ -34,11 +34,13 @@ void process_image_callback(const sensor_msgs::Image img)
     int white_counter_center = 0;
     
     for (int i = 0; i < img.height; i++) {
-      for (int j = 0; j < img.step; j++) {
-        if (img.data[i*img.step+j] == white_pixel) {
-          if (j < img.step/3)
+      for (int j = 0; j < img.width; j++) {
+        if (img.data[i*img.step+3*j] == white_pixel
+            && img.data[i*img.step+3*j+1] == white_pixel
+            && img.data[i*img.step+3*j+2] == white_pixel ) {
+          if (j < img.width/3)
             white_counter_left++;
-          else if (j < img.step/3*2)
+          else if (j < img.width/3*2)
             white_counter_center++;
           else
             white_counter_right++;
@@ -46,7 +48,8 @@ void process_image_callback(const sensor_msgs::Image img)
       }
     }
     ROS_INFO("left: %d, center: %d, right: %d", white_counter_left, white_counter_center, white_counter_right);
-    
+
+    // select the direction or moving forward.
     if (white_counter_left == 0
         && white_counter_center == 0
         && white_counter_right == 0)
