@@ -56,13 +56,13 @@ void process_image_callback(const sensor_msgs::Image img)
       drive_robot(0, 0);
     else if (white_counter_left >= white_counter_center
              && white_counter_left >= white_counter_right)
-      drive_robot(0.0, 0.5);
+      drive_robot(0.4, 0.1);
     else if (white_counter_center >= white_counter_left
              && white_counter_center >= white_counter_right)
-      drive_robot(0.5, 0.0);
+      drive_robot(0.6, 0.0);
     else if (white_counter_right >= white_counter_left
              && white_counter_right >= white_counter_center)
-      drive_robot(0.0, -0.5);
+      drive_robot(0.4, -0.1);
     
     return;
 }
